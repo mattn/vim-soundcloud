@@ -2,6 +2,8 @@
 
 Soundcloud player for Vim
 
+![](http://go-gyazo.appspot.com/63314f2b3a439476.png)
+
 ## Usage
 
 ```
