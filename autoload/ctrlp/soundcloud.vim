@@ -77,6 +77,12 @@ function! ctrlp#soundcloud#init()
     let res = webapi#http#get('https://api.soundcloud.com/tracks.json', {
     \ 'oauth_token': ai.access_token,
     \})
+    if res.status
+      call delete(expand('~/.vim-soundcloud'))
+      echohl ErrorMsg | echon 'failed to authenticate. try again' | echohl None
+      sleep 2
+      return
+    endif
   endtry
   let s:list = webapi#json#decode(res.content)
   return map(copy(s:list), 'v:val.title . " - " . v:val.user.username')
