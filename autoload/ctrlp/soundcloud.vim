@@ -71,6 +71,9 @@ function! ctrlp#soundcloud#init()
     \ 'oauth_token': ai.access_token,
     \ 'genre': s:genre,
     \})
+    if res.status == 401
+      throw "failed"
+    endif
   catch
     if empty(ai) || !has_key(ai, 'refresh_token')
       echohl ErrorMsg | echom 'failed to authenticate: ' . v:exception | echohl None
@@ -82,7 +85,7 @@ function! ctrlp#soundcloud#init()
     \ 'oauth_token': ai.access_token,
     \ 'genre': s:genre,
     \})
-    if res.status
+    if res.status == 401
       call delete(expand('~/.vim-soundcloud'))
       echohl ErrorMsg | echom 'failed to authenticate. try again' | echohl None
       sleep 2
