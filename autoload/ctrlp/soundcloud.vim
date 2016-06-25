@@ -56,7 +56,10 @@ function! s:authenticate(...)
   \ 'username':     username,
   \ 'password':     password,
   \})
-  call writefile([res.content], expand('~/.vim-soundcloud'))
+  echomsg string(res)
+  if res.status == 200
+    call writefile([res.content], expand('~/.vim-soundcloud'))
+  endif
   return webapi#json#decode(res.content)
 endfunction
 
@@ -70,17 +73,18 @@ function! ctrlp#soundcloud#init()
     \})
   catch
     if empty(ai) || !has_key(ai, 'refresh_token')
-      echohl ErrorMsg | echon 'failed to authenticate: ' . v:exception | echohl None
+      echohl ErrorMsg | echom 'failed to authenticate: ' . v:exception | echohl None
       sleep 2
       return
     endif
     let ai = s:authenticate(ai.refresh_token)
     let res = webapi#http#get('https://api.soundcloud.com/tracks.json', {
     \ 'oauth_token': ai.access_token,
+    \ 'genre': s:genre,
     \})
     if res.status
       call delete(expand('~/.vim-soundcloud'))
-      echohl ErrorMsg | echon 'failed to authenticate. try again' | echohl None
+      echohl ErrorMsg | echom 'failed to authenticate. try again' | echohl None
       sleep 2
       return
     endif
@@ -115,8 +119,8 @@ function! ctrlp#soundcloud#exit()
 endfunction
 
 function! ctrlp#soundcloud#start(...)
-  call ctrlp#init(ctrlp#soundcloud#id())
   let s:genre = get(a:000, 0, '')
+  call ctrlp#init(ctrlp#soundcloud#id())
 endfunction
 
 let s:id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
