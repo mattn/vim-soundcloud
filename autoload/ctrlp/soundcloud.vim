@@ -74,6 +74,7 @@ function! ctrlp#soundcloud#init()
       sleep 2
       return
     endif
+    let ai = s:authenticate(ai.refresh_token)
     let res = webapi#http#get('https://api.soundcloud.com/tracks.json', {
     \ 'oauth_token': ai.access_token,
     \})
