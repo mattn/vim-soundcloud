@@ -20,6 +20,8 @@ or
 
 [CtrlP](https://github.com/ctrlpvim/ctrlp.vim)
 
+[webapi-vim](https://github.com/mattn/webapi-vim)
+
 ## License
 
 MIT
